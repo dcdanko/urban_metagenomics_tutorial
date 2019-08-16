@@ -1,10 +1,14 @@
 
 import click
 
-from Bio import SeqIO
+from os.path import basename
+from Bio import SeqIO, BiopythonWarning
 from capalyzer.packet_builder.sub_factories.toxonomy_long_form import longform_taxa
+import warnings
 
 from .qc import kmer_entropy, gc_content
+
+warnings.simplefilter('ignore', BiopythonWarning)
 
 
 def subset_fastq(fastq, n):
@@ -22,17 +26,17 @@ def main():
 
 
 @main.command('qc-stats')
-@click.option('-n', '--number-reads', type=int, deafult=10000)
+@click.option('-n', '--number-reads', type=int, default=1000)
 @click.option('-o', '--outfile', type=click.File('w'), default='-')
 @click.argument('fastqs', nargs=-1, type=click.File('r'))
-def qc_stats(n, outfile, fastqs):
+def qc_stats(number_reads, outfile, fastqs):
     """Print QC Stats for each file."""
     print('filename\tgc_content\tkmer_entropy', file=outfile)
     for fastq in fastqs:
-        seqs = subset_fastq(fastq, n)
+        seqs = subset_fastq(fastq, number_reads)
         entropy = kmer_entropy(seqs)
         gc = gc_content(seqs)
-        print(f'{fastq.name}\t{gc}\t{entropy}', file=outfile)
+        print(f'{basename(fastq.name)}\t{gc}\t{entropy}', file=outfile)
 
 
 @main.command('parse-taxa')

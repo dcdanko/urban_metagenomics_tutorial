@@ -23,4 +23,4 @@ def gc_content(seqs):
                 gc += 1
             else:
                 at += 1
-    return gc / at
+    return gc / (gc + at)
