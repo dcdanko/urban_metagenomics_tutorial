@@ -12,7 +12,10 @@ setuptools.setup(
     author_email='dcdanko@gmail.com',
     url='https://github.com/dcdanko/urban_metagenomics_tutorial',
     packages=setuptools.find_packages(),
-    package_dir={'urban_metagenomics_tutorial': 'urban_metagenomics_tutorial'},
+    package_dir={
+        'urban_metagenomics_tutorial': 'urban_metagenomics_tutorial',
+        'squid': 'squid',
+    },
     install_requires=[
         'click',
         'biopython',
@@ -21,7 +24,8 @@ setuptools.setup(
     ],
     entry_points={
         'console_scripts': [
-            'umt=urban_metagenomics_tutorial.cli:main'
+            'umt=urban_metagenomics_tutorial.cli:main',
+            'squid=squid.cli:main',
         ]
     },
     classifiers=[
